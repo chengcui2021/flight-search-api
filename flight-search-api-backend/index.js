@@ -2,8 +2,6 @@ const express = require('express');
 const { ApolloServer, gql } = require('apollo-server-express');
 const { Pool } = require('pg');
 const redis = require('redis');
-const util = require('util');
-const haversine = require('haversine');
 
 const pool = new Pool({
   user: 'root',
