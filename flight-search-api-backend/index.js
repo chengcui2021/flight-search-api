@@ -3,6 +3,7 @@ const { ApolloServer, gql } = require('apollo-server-express');
 const { Pool } = require('pg');
 const redis = require('redis');
 const util = require('util');
+const haversine = require('haversine');
 
 const pool = new Pool({
   user: 'root',
@@ -12,11 +13,15 @@ const pool = new Pool({
   port: 5432,
 });
 
+const redisClient = redis.createClient();
+redisClient.connect().catch(console.error)
+
+
+
 const calculateCO2Emissions = (distance) => {
   const CO2_PER_KM = 0.115;
   return distance * CO2_PER_KM;
 };
-
 
 const typeDefs = gql`
   type Flight {
@@ -40,6 +45,11 @@ const typeDefs = gql`
 const resolvers = {
   Query: {
     searchFlights: async (_, { departureCity, destinationCity, date }) => {
+      const cacheKey = `flights_${departureCity}_${destinationCity}_${date}`;
+      const cachedFlights = await redisClient.get(cacheKey);
+      if (cachedFlights) {
+        return JSON.parse(cachedFlights);
+      }
 
       const res = await pool.query(
         `SELECT * FROM flights WHERE departure_city = $1 AND destination_city = $2 AND DATE(departure_time) = $3`,
@@ -54,6 +64,8 @@ const resolvers = {
         const co2Emissions = calculateCO2Emissions(flight.distance);
         return { ...flight, co2Emissions };
       });
+
+      await redisClient.set(cacheKey, JSON.stringify(flights), 'EX', 3600);
       return flights;
     },
   },
