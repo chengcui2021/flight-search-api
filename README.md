@@ -42,20 +42,23 @@ The system consists of the following components:
    ```bash
    git clone https://github.com/chengcui2021/flight-search-api.git
    cd flight-search-api
+   
 2. Set up Backend server, PostgreSQL and Redis:
    ```bash
    docker compose up --build
-3. Create the table and seed the PostgreSQL database with sample data and access to database:
+
+3. Access to database and create the table and seed the PostgreSQL database with sample data:
    ```bash
-   psql -U root -d flight -a -f db.sql
-   psql -U root -d flight -a -f sample_data.sql
-   psql postgresql://root:12344@localhost:5432/flight
+   psql postgresql://root:12345@localhost:5432/flight
+   \i db.sql
+   \i sample_data.sql
 
 4. Start the frontend server:
    ```bash
    cd flight-search-frontend
    npm install
    npm start
+
 5. Open browser and navigate to http://localhost:3000.
 
 6. Naviagte to http://localhost:4000/graphql to run graphql queries
