@@ -62,16 +62,16 @@ function FlightSearch() {
       {error && <p>Error: {error.message}</p>}
       {data && (
         <div>
-          {data.searchFlights.map(({ id, flightNumber, airline, departureCity, destinationCity, departureTime, arrivalTime, price, co2Emissions }) => (
-            <div key={id}>
+          {data.searchFlights.map((searchFlight) => (
+            <div key={searchFlight.id}>
               <p>
-                {flightNumber} - {airline}: {departureCity} to {destinationCity}
+                {searchFlight.flight_number} - {searchFlight.airline}: {searchFlight.departure_city} to {searchFlight.destination_city}
               </p>
               <p>
-                Departure: {new Date(departureTime).toLocaleString()}, Arrival: {new Date(arrivalTime).toLocaleString()}
+                Departure: {new Date(searchFlight.departure_time).toLocaleTimeString()}, Arrival: {new Date(searchFlight.arrival_time).toLocaleTimeString()}
               </p>
               <p>
-                Price: ${price}, CO2 Emissions: {co2Emissions} kg
+                Price: ${searchFlight.price}, CO2 Emissions: {searchFlight.co2Emissions} kg
               </p>
             </div>
           ))}
