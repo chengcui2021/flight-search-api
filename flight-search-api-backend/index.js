@@ -5,13 +5,16 @@ const redis = require('redis');
 
 const pool = new Pool({
   user: 'root',
-  host: 'localhost',
+  host: 'db',
   database: 'flight',
   password: '12345',
   port: 5432,
 });
 
-const redisClient = redis.createClient();
+const redisClient = redis.createClient({
+  url: 'redis://redis:6379'
+  });
+
 redisClient.connect().catch(console.error)
 
 
