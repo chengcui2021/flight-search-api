@@ -42,7 +42,7 @@ The system consists of the following components:
    ```bash
    git clone https://github.com/chengcui2021/flight-search-api.git
    cd flight-search-api
-   
+
 2. Set up Backend server, PostgreSQL and Redis:
    ```bash
    docker compose up --build
@@ -63,8 +63,8 @@ The system consists of the following components:
 
 6. Naviagte to http://localhost:4000/graphql to run graphql queries
    ```bash
-   query SearchFlights($departureCity: String!, $destinationCity: String!, $date: String!) {
-    searchFlights(departureCity: $departureCity, destinationCity: $destinationCity, date: $date) {
+   query SearchFlights($departureCity: String!, $destinationCity: String!, $date: String!, $sortBy: SortByInput, $filterBy: FilterByInput) {
+    searchFlights(departureCity: $departureCity, destinationCity: $destinationCity, date: $date, sortBy: $sortBy, filterBy: $filterBy) {
       id
       flight_number
       airline
@@ -72,11 +72,19 @@ The system consists of the following components:
       destination_city
       departure_time
       arrival_time
-    	distance
       price
+      distance
       co2Emissions
     }
-   }
+  }
+  enter queries variables
+  {
+  "departureCity": "London",
+  "destinationCity": "Paris",
+  "date": "2024-07-02",
+  "sortBy": {"field": "price", "order": "ASC"},
+  "filterBy": {"priceRange": {"min": 0, "max": 1000}}
+  }
 
 
 ### Design Decisions
