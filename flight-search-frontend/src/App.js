@@ -5,6 +5,7 @@ import client from './ApolloClient';
 const SEARCH_FLIGHTS = gql`
 query SearchFlights($departureCity: String!, $destinationCity: String!, $date: String!, $sortBy: SortByInput, $filterBy: FilterByInput) {
   searchFlights(departureCity: $departureCity, destinationCity: $destinationCity, date: $date, sortBy: $sortBy, filterBy: $filterBy) {
+    id
     flight_number
     airline
     departure_city
@@ -33,7 +34,6 @@ function FlightSearch() {
     console.log(date)
     if (departureCity && destinationCity && date) {
       refetch();
-      console.log("show search data: ", data)
     }
   };
 
